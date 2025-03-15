@@ -1,0 +1,6 @@
+@BookFiend.API_HostAddress = http://localhost:5171
+
+GET {{BookFiend.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

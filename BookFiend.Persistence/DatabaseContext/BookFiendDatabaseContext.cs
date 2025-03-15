@@ -1,4 +1,5 @@
-﻿using BookFiend.Domain.Entities;
+﻿using BookFiend.Domain.BaseEntity;
+using BookFiend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,23 @@ namespace BookFiend.Persistence.DatabaseContext
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookFiendDatabaseContext).Assembly);
 
             base.OnModelCreating(modelBuilder);
+        }
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedDate = DateTime.Now;
+                }
+
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.UpdatedDate = DateTime.Now;
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         public DbSet<Book> Books { get; set; }

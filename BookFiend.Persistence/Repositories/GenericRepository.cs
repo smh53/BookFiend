@@ -47,7 +47,7 @@ namespace BookFiend.Persistence.Repositories
 
         public async Task UpdateAsync(T entity)
         {
-           _dbContext.Update(entity);
+            _dbContext.Update(entity);
            await _dbContext.SaveChangesAsync();
         }
     }

@@ -1,3 +1,4 @@
+using BookFiend.API.Middleware;
 using BookFiend.Application;
 using BookFiend.Infrastructure;
 using BookFiend.Persistence;
@@ -22,7 +23,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
+app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

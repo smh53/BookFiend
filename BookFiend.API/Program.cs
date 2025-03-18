@@ -5,6 +5,7 @@ using BookFiend.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var AngularPanelCorsPolicy = "_angularPanelCorsPolicy";
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -16,14 +17,17 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", policy =>
+    options.AddPolicy(name: AngularPanelCorsPolicy, policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+        policy.WithOrigins("http://localhost:4200")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors(AngularPanelCorsPolicy);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
